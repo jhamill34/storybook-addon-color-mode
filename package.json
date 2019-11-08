@@ -1,0 +1,69 @@
+{
+  "name": "storybook-addon-color-mode",
+  "version": "0.0.0",
+  "main": "dist/index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "commit": "git-cz",
+    "compile": "tsc --noEmit",
+    "lint": "eslint --ignore-path .gitignore \"*/**/*.{js,ts,tsx}\" --quiet --fix"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^8.2.0",
+    "@commitlint/config-conventional": "^8.2.0",
+    "@emotion/core": "^10.0.22",
+    "@mdx-js/react": "^1.5.1",
+    "@storybook/addons": "^5.2.5",
+    "@storybook/api": "^5.2.5",
+    "@storybook/components": "^5.2.5",
+    "@storybook/core-events": "^5.2.5",
+    "@storybook/theming": "^5.2.5",
+    "@types/react": "^16.9.11",
+    "@types/theme-ui": "^0.2.4",
+    "@typescript-eslint/eslint-plugin": "^2.6.1",
+    "@typescript-eslint/parser": "^2.6.1",
+    "commitizen": "^4.0.3",
+    "cz-conventional-changelog": "^3.0.2",
+    "eslint": "^6.6.0",
+    "eslint-config-prettier": "^6.5.0",
+    "eslint-plugin-emotion": "^10.0.14",
+    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-react": "^7.16.0",
+    "eslint-plugin-react-hooks": "^2.2.0",
+    "husky": "^3.0.9",
+    "lint-staged": "^9.4.2",
+    "prettier": "^1.18.2",
+    "react": "^16.11.0",
+    "react-dom": "^16.11.0",
+    "theme-ui": "^0.2.46",
+    "typescript": "^3.7.2"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "git add"
+    ],
+    "*.{tsx, ts}": [
+      "bash -c \"yarn compile\"",
+      "eslint --fix",
+      "git add"
+    ]
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
+}
