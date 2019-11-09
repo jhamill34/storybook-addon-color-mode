@@ -8,21 +8,13 @@ import {
 import { styled } from '@storybook/theming'
 import { useAddonState, useParameter } from '@storybook/api'
 
-import { ADDON_ID, PARAM_KEY, CHANGE_MODE } from './constants'
+import { toList, toLinks } from './utils'
+import { ADDON_ID, PARAM_KEY, CHANGE_MODE, DEFAULT_MODE_ID } from './constants'
 import {
   ColorModeAddonState,
   ColorModeAddonParams,
-  ColorModeMap,
-  ColorModeItem,
+  ColorModeChannel,
 } from './models'
-import Channel from '@storybook/channels'
-
-interface Link {
-  id: string
-  title: string
-  right?: React.ReactNode
-  onClick?: () => void
-}
 
 const IconButtonWithLabel = styled(IconButton)`
   display: flex;
@@ -33,52 +25,15 @@ const IconButtonLabel = styled.div`
   margin-left: 1em;
 `
 
-const defaultMode: ColorModeItem = {
-  id: 'default',
-  name: 'Default',
-}
-
-const toList = (map: ColorModeMap): Array<ColorModeItem> => {
-  return [
-    defaultMode,
-    ...Object.entries(map).map(
-      ([id, item]): ColorModeItem => ({
-        id,
-        ...item,
-      })
-    ),
-  ]
-}
-
-const toLinks = (
-  items: Array<ColorModeItem>,
-  currentId: string,
-  set: (id: string) => void,
-  close: () => void
-): Array<Link> => {
-  return items.map(
-    (i: ColorModeItem): Link => ({
-      id: i.id,
-      title: i.name,
-      onClick: (): void => {
-        if (i.id !== currentId) {
-          set(i.id)
-        }
-        close()
-      },
-    })
-  )
-}
-
 interface ColorModeToolProps {
-  channel: Channel
+  channel: ColorModeChannel
 }
 
 export const ColorModeTool: React.FC<ColorModeToolProps> = (
   props: ColorModeToolProps
 ) => {
   const [state, setState] = useAddonState<ColorModeAddonState>(ADDON_ID, {
-    currentId: 'default',
+    currentId: DEFAULT_MODE_ID,
   })
 
   const { modes } = useParameter<ColorModeAddonParams>(PARAM_KEY, {
@@ -87,7 +42,7 @@ export const ColorModeTool: React.FC<ColorModeToolProps> = (
 
   const list = toList(modes)
 
-  const active = state.currentId !== 'default'
+  const active = state.currentId !== DEFAULT_MODE_ID
 
   const updateMode = (id: string): void => {
     setState({ currentId: id })
@@ -109,7 +64,7 @@ export const ColorModeTool: React.FC<ColorModeToolProps> = (
         active={active}
         title="Change the current color mode"
         onDoubleClick={(): void => {
-          updateMode('default')
+          updateMode(DEFAULT_MODE_ID)
         }}
       >
         <Icons icon="category" />

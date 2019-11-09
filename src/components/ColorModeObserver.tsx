@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react'
+import { ColorModeChannel } from '../models'
 import { Styled, ColorMode, useColorMode } from 'theme-ui'
-import Channel from '@storybook/channels'
 import { CHANGE_MODE } from '../constants'
 
 interface ColorModeObserverProps {
   children: React.ReactNode
-  channel: Channel
+  channel: ColorModeChannel
 }
 
 export const ColorModeObserver: React.FC<ColorModeObserverProps> = (
