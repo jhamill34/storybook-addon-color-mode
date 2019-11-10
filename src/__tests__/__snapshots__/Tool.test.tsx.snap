@@ -1,0 +1,72 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ColorModeTool renders initial styles properly 1`] = `
+.emotion-3 {
+  display: inline-block;
+  cursor: pointer;
+}
+
+.emotion-2 {
+  height: 40px;
+  background: none;
+  color: inherit;
+  padding: 0;
+  cursor: pointer;
+  border: 0 solid transparent;
+  border-top: 3px solid transparent;
+  border-bottom: 3px solid transparent;
+  -webkit-transition: color 0.2s linear,border-bottom-color 0.2s linear;
+  transition: color 0.2s linear,border-bottom-color 0.2s linear;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.emotion-2:hover,
+.emotion-2:focus {
+  outline: 0 none;
+  color: #1EA7FD;
+}
+
+.emotion-2 > svg {
+  width: 15px;
+}
+
+.emotion-1 {
+  shape-rendering: inherit;
+  -webkit-transform: translate3d(0,0,0);
+  -ms-transform: translate3d(0,0,0);
+  transform: translate3d(0,0,0);
+  display: block;
+}
+
+.emotion-0 {
+  fill: currentColor;
+}
+
+<div>
+  <div
+    class="emotion-3"
+  >
+    <button
+      class="emotion-2"
+      title="Change the current color mode"
+    >
+      <svg
+        class="emotion-1"
+        viewBox="0 0 1024 1024"
+      >
+        <path
+          class="emotion-0"
+          d="M925.224 256.37c-1.694-0.216-3.408-0.37-5.162-0.37h-816c-1.754 0-3.468 0.152-5.162 0.37-19.646 2.538-34.838 19.292-34.838 39.63v624c0 22.094 17.91 40 40 40h816c13.808 0 25.98-6.996 33.168-17.636 0.102-0.148 0.184-0.308 0.282-0.458 0.612-0.924 1.2-1.862 1.722-2.838 0.046-0.082 0.080-0.172 0.124-0.254 2.994-5.61 4.704-12.008 4.704-18.808v-624.004c0-20.342-15.19-37.096-34.838-39.632zM144.062 880v-544h736v544h-736zM896.11 180c0 11.044-8.954 20-20 20h-728.032c-11.046 0-20-8.956-20-20v0c0-11.046 8.954-20 20-20h728.032c11.046 0 20 8.954 20 20v0zM832.094 84c0 11.044-8.954 20-20 20h-600c-11.046 0-20-8.956-20-20v0c0-11.046 8.954-20 20-20h600c11.046 0 20 8.954 20 20v0z"
+        />
+      </svg>
+    </button>
+  </div>
+</div>
+`;

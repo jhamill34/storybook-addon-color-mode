@@ -9,7 +9,13 @@ import { styled } from '@storybook/theming'
 import { useAddonState, useParameter } from '@storybook/api'
 
 import { toList, toLinks } from './utils'
-import { ADDON_ID, PARAM_KEY, CHANGE_MODE, DEFAULT_MODE_ID } from './constants'
+import {
+  ADDON_ID,
+  PARAM_KEY,
+  CHANGE_MODE,
+  DEFAULT_MODE_ID,
+  TOOL_TIP_TITLE,
+} from './constants'
 import {
   ColorModeAddonState,
   ColorModeAddonParams,
@@ -62,7 +68,7 @@ export const ColorModeTool: React.FC<ColorModeToolProps> = (
     >
       <IconButtonWithLabel
         active={active}
-        title="Change the current color mode"
+        title={TOOL_TIP_TITLE}
         onDoubleClick={(): void => {
           updateMode(DEFAULT_MODE_ID)
         }}

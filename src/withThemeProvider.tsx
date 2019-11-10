@@ -7,7 +7,7 @@ import addons, {
 import { ThemeProvider, Theme } from 'theme-ui'
 import { ColorModeObserver } from './components/ColorModeObserver'
 
-const makeWrapperWithTheme = (theme: Theme): StoryWrapper => (
+export const makeWrapperWithTheme = (theme: Theme): StoryWrapper => (
   story,
   context
 ): JSX.Element => {
