@@ -13,7 +13,7 @@ jest.mock('theme-ui', () => ({
 }))
 
 interface Registry {
-  [key: string]: (...args: any) => void
+  [key: string]: (mode: string) => void
 }
 
 describe('ColorModeObserver', () => {
