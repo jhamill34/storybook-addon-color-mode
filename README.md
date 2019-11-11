@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/joshrasmussen34/storybook-addon-color-mode.svg?branch=master)](https://travis-ci.com/joshrasmussen34/storybook-addon-color-mode)
+
 # Storybook Color Mode Addon
 
 Storybook Color Addon allows your stories to be displayed in their various color modes specified by theme-ui
