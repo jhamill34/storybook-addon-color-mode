@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
   WithTooltip,
   IconButton,
@@ -38,12 +38,13 @@ interface ColorModeToolProps {
 export const ColorModeTool: React.FC<ColorModeToolProps> = (
   props: ColorModeToolProps
 ) => {
-  const [state, setState] = useAddonState<ColorModeAddonState>(ADDON_ID, {
-    currentId: DEFAULT_MODE_ID,
+  const { modes, defaultMode } = useParameter<ColorModeAddonParams>(PARAM_KEY, {
+    modes: {},
+    defaultMode: DEFAULT_MODE_ID,
   })
 
-  const { modes } = useParameter<ColorModeAddonParams>(PARAM_KEY, {
-    modes: {},
+  const [state, setState] = useAddonState<ColorModeAddonState>(ADDON_ID, {
+    currentId: defaultMode || DEFAULT_MODE_ID,
   })
 
   const list = toList(modes)
@@ -54,6 +55,10 @@ export const ColorModeTool: React.FC<ColorModeToolProps> = (
     setState({ currentId: id })
     props.channel.emit(CHANGE_MODE, id)
   }
+
+  useEffect(() => {
+    props.channel.emit(CHANGE_MODE, defaultMode)
+  }, [defaultMode, props.channel])
 
   return (
     <WithTooltip
