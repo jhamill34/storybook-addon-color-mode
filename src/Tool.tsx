@@ -51,8 +51,8 @@ export const ColorModeTool: React.FC<ColorModeToolProps> = (
   const active = state.currentId !== DEFAULT_MODE_ID
 
   const updateMode = (id: string): void => {
-    setState({ currentId: id })
     props.channel.emit(CHANGE_MODE, id)
+    setState({ currentId: id })
   }
 
   return (

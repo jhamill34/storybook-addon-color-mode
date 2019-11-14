@@ -1,16 +1,10 @@
 import React from 'react'
-import { render } from '@testing-library/react'
+import { render, act } from '@testing-library/react'
 import { ColorModeObserver } from '../components/ColorModeObserver'
 import { ColorModeChannel } from '../models'
 import { CHANGE_MODE } from '../constants'
 
 const mockSetMode = jest.fn()
-jest.mock('theme-ui', () => ({
-  ...jest.requireActual('theme-ui'),
-  useColorMode: jest.fn(() => {
-    return ['default', mockSetMode]
-  }),
-}))
 
 interface Registry {
   [key: string]: (mode: string) => void
@@ -35,7 +29,7 @@ describe('ColorModeObserver', () => {
 
   test('renders initial styles properly', () => {
     const { container } = render(
-      <ColorModeObserver channel={mockChannel}>
+      <ColorModeObserver theme={{}} channel={mockChannel}>
         <h1>This is a test</h1>
       </ColorModeObserver>
     )
@@ -45,7 +39,7 @@ describe('ColorModeObserver', () => {
 
   test('a listener should be added upon mounting', () => {
     render(
-      <ColorModeObserver channel={mockChannel}>
+      <ColorModeObserver theme={{}} channel={mockChannel}>
         <h1>This is a test</h1>
       </ColorModeObserver>
     )
@@ -55,7 +49,7 @@ describe('ColorModeObserver', () => {
 
   test('a listener should be removed upon unmounting', () => {
     const { unmount } = render(
-      <ColorModeObserver channel={mockChannel}>
+      <ColorModeObserver theme={{}} channel={mockChannel}>
         <h1>This is a test</h1>
       </ColorModeObserver>
     )
@@ -65,29 +59,39 @@ describe('ColorModeObserver', () => {
     expect(mockChannel.removeListener).toBeCalledTimes(1)
   })
 
-  test('set mode should have been triggered upon emitting the CHANGE_MODE event', () => {
+  test('emit CHANGE_MODE should set the class of the body element', () => {
     render(
-      <ColorModeObserver channel={mockChannel}>
+      <ColorModeObserver theme={{}} channel={mockChannel}>
         <h1>This is a test</h1>
       </ColorModeObserver>
     )
 
-    // Roughly equiviant to the emit method
-    registry[CHANGE_MODE]('dark')
+    act(() => {
+      registry[CHANGE_MODE]('dark')
+    })
 
-    expect(mockSetMode).toBeCalledTimes(1)
+    expect(document.body.className).toEqual('theme-ui-dark')
   })
 
-  test('set mode should not be triggered upon emitting the CHANGE_MODE event for the already set mode', () => {
+  test('emit CHANGE_MODE should remove the class of the previous mode', () => {
     render(
-      <ColorModeObserver channel={mockChannel}>
+      <ColorModeObserver theme={{}} channel={mockChannel}>
         <h1>This is a test</h1>
       </ColorModeObserver>
     )
 
-    // roughly equivilant to the emit method
-    registry[CHANGE_MODE]('default')
+    act(() => {
+      registry[CHANGE_MODE]('dark')
+    })
 
-    expect(mockSetMode).toBeCalledTimes(0)
+    act(() => {
+      registry[CHANGE_MODE]('default')
+    })
+
+    act(() => {
+      registry[CHANGE_MODE]('default')
+    })
+
+    expect(document.body.className).toEqual('theme-ui-default')
   })
 })
