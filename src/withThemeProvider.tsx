@@ -4,7 +4,7 @@ import addons, {
   MakeDecoratorResult,
   StoryWrapper,
 } from '@storybook/addons'
-import { ThemeProvider, Theme } from 'theme-ui'
+import { Theme } from 'theme-ui'
 import { ColorModeObserver } from './components/ColorModeObserver'
 
 export const makeWrapperWithTheme = (theme: Theme): StoryWrapper => (
@@ -14,9 +14,9 @@ export const makeWrapperWithTheme = (theme: Theme): StoryWrapper => (
   const channel = addons.getChannel()
 
   return (
-    <ThemeProvider theme={theme}>
-      <ColorModeObserver channel={channel}>{story(context)}</ColorModeObserver>
-    </ThemeProvider>
+    <ColorModeObserver theme={theme} channel={channel}>
+      {story(context)}
+    </ColorModeObserver>
   )
 }
 
