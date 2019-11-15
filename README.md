@@ -39,7 +39,8 @@ addParameters({
       dark: {
         name: 'Dark'
       }
-    }
+    },
+    defaultMode: 'dark'
   },
 });
 ```
@@ -47,8 +48,6 @@ addParameters({
 Options can take a object with the following keys:
 
 ### modes: Object
-
----
 
 A key-value pair of color modes's key and properties (see `Color Mode Model` definition below) for all color modes to be displayed. 
 
@@ -63,6 +62,12 @@ A key-value pair of color modes's key and properties (see `Color Mode Model` def
   name: 'Darkness',
 }
 ```
+
+### defaultMode: string
+
+A string representing the key that you would like to use as your default color mode. This will 
+be the color mode that will load up when your storybook starts and when you reload the page. 
+This can also be set on a per-story basis as well. 
 
 ## Example
 
@@ -79,7 +84,8 @@ addParameters({
       dark: {
         name: 'Dark' // This is what will be displayed in the Storybook UI
       }
-    }
+    },
+    defaultMode: 'dark' // Dark mode will start automatically 
   },
 });
 ```
