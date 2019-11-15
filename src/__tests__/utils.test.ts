@@ -1,4 +1,10 @@
-import { toList, toLinks } from '../utils'
+import {
+  toList,
+  toLinks,
+  isElementDirty,
+  makeDirty,
+  setThemeUIClass,
+} from '../utils'
 import { ColorModeItem } from '../models'
 
 describe('Utility Functions', () => {
@@ -62,6 +68,42 @@ describe('Utility Functions', () => {
       const result = toLinks(items, 'default', mockSet, mockClose)
       result[0].onClick()
       expect(mockSet).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('isElementDirty/makeDirty', () => {
+    test('check for clean element', () => {
+      const div = document.createElement('div')
+
+      expect(isElementDirty(div)).toBeFalsy()
+    })
+
+    test('check for dirty element', () => {
+      const div = document.createElement('div')
+      makeDirty(div)
+
+      expect(isElementDirty(div)).toBeTruthy()
+    })
+  })
+
+  describe('setThemeUIClass', () => {
+    test('should set theme if not theme-ui class exists but other classes exist', () => {
+      const div = document.createElement('div')
+      div.className = 'test-class'
+
+      setThemeUIClass(div, 'dark')
+
+      expect(div.classList).toContain('theme-ui-dark')
+    })
+
+    test('should replace theme-ui class if one exists', () => {
+      const div = document.createElement('div')
+      div.className = 'theme-ui-random test-class'
+
+      setThemeUIClass(div, 'dark')
+
+      expect(div.classList).toContain('theme-ui-dark')
+      expect(div.classList).not.toContain('theme-ui-random')
     })
   })
 })
