@@ -1,28 +1,31 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { ColorModeChannel } from '../models'
-import { Styled, ColorMode, Theme } from 'theme-ui'
+import { Styled, ColorMode, Theme, ThemeProvider } from 'theme-ui'
 import { CHANGE_MODE } from '../constants'
-import { ThemeProvider } from 'emotion-theming'
+import { isElementDirty, makeDirty, setThemeUIClass } from '../utils'
 
 interface ColorModeObserverProps {
-  theme: Theme
   children: React.ReactNode
   channel: ColorModeChannel
+  initialMode: string
+  theme: Theme
 }
 
-export const ColorModeObserver: React.FC<ColorModeObserverProps> = (
+const BaseColorModeObserver: React.FC<ColorModeObserverProps> = (
   props: ColorModeObserverProps
 ) => {
-  const [mode, setMode] = useState()
+  // If a theme-ui-<something> class exists don't set anything
+  useEffect(() => {
+    if (!isElementDirty(document.body)) {
+      setThemeUIClass(document.body, props.initialMode)
+      makeDirty(document.body)
+    }
+  }, [props.initialMode])
 
+  // Replace the current theme-ui class with the new one
   useEffect(() => {
     const handleEvent = (newMode: string): void => {
-      if (mode !== newMode) {
-        document.body.classList.remove('theme-ui-' + mode)
-        document.body.classList.add('theme-ui-' + newMode)
-
-        setMode(newMode)
-      }
+      setThemeUIClass(document.body, newMode)
     }
 
     props.channel.addListener(CHANGE_MODE, handleEvent)
@@ -30,7 +33,7 @@ export const ColorModeObserver: React.FC<ColorModeObserverProps> = (
     return (): void => {
       props.channel.removeListener(CHANGE_MODE, handleEvent)
     }
-  }, [mode, props.channel, setMode])
+  }, [props.channel])
 
   return (
     <ThemeProvider theme={props.theme}>
@@ -39,3 +42,5 @@ export const ColorModeObserver: React.FC<ColorModeObserverProps> = (
     </ThemeProvider>
   )
 }
+
+export const ColorModeObserver = React.memo(BaseColorModeObserver)
