@@ -7,7 +7,6 @@ import {
 } from '@storybook/components'
 import { styled } from '@storybook/theming'
 import { useAddonState, useParameter } from '@storybook/api'
-
 import { toList, toLinks } from './utils'
 import {
   ADDON_ID,
@@ -21,6 +20,7 @@ import {
   ColorModeAddonParams,
   ColorModeChannel,
 } from './models'
+import { useKeyCode } from './useKeyCode'
 
 const IconButtonWithLabel = styled(IconButton)`
   display: flex;
@@ -48,17 +48,18 @@ export const ColorModeTool: React.FC<ColorModeToolProps> = (
   })
 
   const list = toList(modes)
-
   const active = state.currentId !== DEFAULT_MODE_ID
 
   const updateMode = (id: string): void => {
-    props.channel.emit(CHANGE_MODE, id)
+    props.channel.emit<string>(CHANGE_MODE, id)
     setState({ currentId: id })
   }
 
+  useKeyCode(props.channel)
+
   useEffect(() => {
-    props.channel.emit(CHANGE_MODE, defaultMode)
-  }, [defaultMode, props.channel])
+    props.channel.emit<string>(CHANGE_MODE, state.currentId)
+  }, [props.channel, state.currentId])
 
   return (
     <WithTooltip

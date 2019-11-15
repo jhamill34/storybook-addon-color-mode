@@ -24,14 +24,14 @@ const BaseColorModeObserver: React.FC<ColorModeObserverProps> = (
 
   // Replace the current theme-ui class with the new one
   useEffect(() => {
-    const handleEvent = (newMode: string): void => {
-      setThemeUIClass(document.body, newMode)
+    const handleEvent = (mode: string): void => {
+      setThemeUIClass(document.body, mode)
     }
 
-    props.channel.addListener(CHANGE_MODE, handleEvent)
+    props.channel.addListener<string>(CHANGE_MODE, handleEvent)
 
     return (): void => {
-      props.channel.removeListener(CHANGE_MODE, handleEvent)
+      props.channel.removeListener<string>(CHANGE_MODE, handleEvent)
     }
   }, [props.channel])
 

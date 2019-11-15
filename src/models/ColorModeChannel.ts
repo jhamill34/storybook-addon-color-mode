@@ -1,5 +1,7 @@
+export type Listener<T> = (event: T) => void
+
 export interface ColorModeChannel {
-  emit(event: string, id: string): void
-  addListener(event: string, listener: (newId: string) => void): void
-  removeListener(event: string, listener: (newId: string) => void): void
+  emit<T>(event: string, args: T): void
+  addListener<T>(event: string, listener: Listener<T>): void
+  removeListener<T>(event: string, listener: Listener<T>): void
 }
