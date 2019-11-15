@@ -29,7 +29,7 @@ describe('ColorModeObserver', () => {
 
   test('renders initial styles properly', () => {
     const { container } = render(
-      <ColorModeObserver theme={{}} channel={mockChannel}>
+      <ColorModeObserver initialMode="dark" theme={{}} channel={mockChannel}>
         <h1>This is a test</h1>
       </ColorModeObserver>
     )
@@ -39,7 +39,7 @@ describe('ColorModeObserver', () => {
 
   test('a listener should be added upon mounting', () => {
     render(
-      <ColorModeObserver theme={{}} channel={mockChannel}>
+      <ColorModeObserver initialMode="dark" theme={{}} channel={mockChannel}>
         <h1>This is a test</h1>
       </ColorModeObserver>
     )
@@ -49,7 +49,7 @@ describe('ColorModeObserver', () => {
 
   test('a listener should be removed upon unmounting', () => {
     const { unmount } = render(
-      <ColorModeObserver theme={{}} channel={mockChannel}>
+      <ColorModeObserver initialMode="dark" theme={{}} channel={mockChannel}>
         <h1>This is a test</h1>
       </ColorModeObserver>
     )
@@ -59,39 +59,50 @@ describe('ColorModeObserver', () => {
     expect(mockChannel.removeListener).toBeCalledTimes(1)
   })
 
+  test('first render should add a default mode and mark as dirty', () => {
+    render(
+      <ColorModeObserver initialMode="dark" theme={{}} channel={mockChannel}>
+        <h1>This is a test</h1>
+      </ColorModeObserver>
+    )
+
+    expect(document.body.classList).toContain('theme-ui-dark')
+    expect(document.body.classList).toContain('dirty-color-mode-addon')
+  })
+
   test('emit CHANGE_MODE should set the class of the body element', () => {
     render(
-      <ColorModeObserver theme={{}} channel={mockChannel}>
+      <ColorModeObserver initialMode="dark" theme={{}} channel={mockChannel}>
         <h1>This is a test</h1>
       </ColorModeObserver>
     )
 
     act(() => {
-      registry[CHANGE_MODE]('dark')
+      registry[CHANGE_MODE]('default')
     })
 
-    expect(document.body.className).toEqual('theme-ui-dark')
+    expect(document.body.classList).toContain('theme-ui-default')
+    expect(document.body.classList).not.toContain('theme-ui-dark')
+    expect(document.body.classList).toContain('dirty-color-mode-addon')
   })
 
   test('emit CHANGE_MODE should remove the class of the previous mode', () => {
     render(
-      <ColorModeObserver theme={{}} channel={mockChannel}>
+      <ColorModeObserver initialMode="dark" theme={{}} channel={mockChannel}>
         <h1>This is a test</h1>
       </ColorModeObserver>
     )
 
     act(() => {
+      registry[CHANGE_MODE]('default')
+    })
+
+    act(() => {
       registry[CHANGE_MODE]('dark')
     })
 
-    act(() => {
-      registry[CHANGE_MODE]('default')
-    })
-
-    act(() => {
-      registry[CHANGE_MODE]('default')
-    })
-
-    expect(document.body.className).toEqual('theme-ui-default')
+    expect(document.body.classList).toContain('theme-ui-dark')
+    expect(document.body.classList).not.toContain('theme-ui-default')
+    expect(document.body.classList).toContain('dirty-color-mode-addon')
   })
 })
