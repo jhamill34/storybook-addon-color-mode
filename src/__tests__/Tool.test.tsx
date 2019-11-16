@@ -18,7 +18,7 @@ const mockSetState = jest.fn()
 jest.mock('@storybook/api', () => ({
   ...jest.requireActual('@storybook/api'),
   useAddonState: jest.fn(() => {
-    return [{ currentId: 'default' }, mockSetState]
+    return [{ currentIndex: 0 }, mockSetState]
   }),
   useParameter: jest.fn(() => {
     return { modes: {} }

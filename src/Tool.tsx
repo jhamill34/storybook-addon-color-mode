@@ -14,6 +14,7 @@ import {
   CHANGE_MODE,
   DEFAULT_MODE_ID,
   TOOL_TIP_TITLE,
+  NEXT_MODE,
 } from './constants'
 import {
   ColorModeAddonState,
@@ -43,23 +44,43 @@ export const ColorModeTool: React.FC<ColorModeToolProps> = (
     defaultMode: DEFAULT_MODE_ID,
   })
 
+  const list = toList(modes)
+
   const [state, setState] = useAddonState<ColorModeAddonState>(ADDON_ID, {
-    currentId: defaultMode || DEFAULT_MODE_ID,
+    currentIndex: list.findIndex(m => m.id === defaultMode),
   })
 
-  const list = toList(modes)
-  const active = state.currentId !== DEFAULT_MODE_ID
+  const active = state.currentIndex > 0
 
-  const updateMode = (id: string): void => {
-    props.channel.emit<string>(CHANGE_MODE, id)
-    setState({ currentId: id })
+  const updateMode = (index: number): void => {
+    setState({ currentIndex: index })
   }
 
   useKeyCode(props.channel)
 
   useEffect(() => {
-    props.channel.emit<string>(CHANGE_MODE, state.currentId)
-  }, [props.channel, state.currentId])
+    props.channel.emit<string>(CHANGE_MODE, list[state.currentIndex].id)
+  }, [list, props.channel, state.currentIndex])
+
+  useEffect(() => {
+    const handleNextMode = (amount: number): void => {
+      let computedIndex = (state.currentIndex + amount) % list.length
+
+      if (computedIndex < 0) {
+        computedIndex = list.length - 1
+      }
+
+      setState({
+        currentIndex: computedIndex,
+      })
+    }
+
+    props.channel.addListener<number>(NEXT_MODE, handleNextMode)
+
+    return (): void => {
+      props.channel.removeListener<number>(NEXT_MODE, handleNextMode)
+    }
+  }, [list.length, props.channel, setState, state.currentIndex])
 
   return (
     <WithTooltip
@@ -67,7 +88,7 @@ export const ColorModeTool: React.FC<ColorModeToolProps> = (
       trigger="click"
       tooltip={({ onHide }): React.ReactNode => (
         <TooltipLinkList
-          links={toLinks(list, state.currentId, updateMode, onHide)}
+          links={toLinks(list, state.currentIndex, updateMode, onHide)}
         />
       )}
       closeOnClick
@@ -76,12 +97,12 @@ export const ColorModeTool: React.FC<ColorModeToolProps> = (
         active={active}
         title={TOOL_TIP_TITLE}
         onDoubleClick={(): void => {
-          updateMode(DEFAULT_MODE_ID)
+          updateMode(0)
         }}
       >
         <Icons icon="category" />
         {active ? (
-          <IconButtonLabel>{modes[state.currentId].name}</IconButtonLabel>
+          <IconButtonLabel>{list[state.currentIndex].name}</IconButtonLabel>
         ) : null}
       </IconButtonWithLabel>
     </WithTooltip>

@@ -1,3 +1,3 @@
 export interface ColorModeAddonState {
-  currentId: string
+  currentIndex: number
 }

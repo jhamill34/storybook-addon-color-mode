@@ -38,17 +38,17 @@ export const toList = (map: ColorModeMap): Array<ColorModeItem> => {
  */
 export const toLinks = (
   items: Array<ColorModeItem>,
-  currentId: string,
-  set: (id: string) => void,
+  currentIndex: number,
+  set: (index: number) => void,
   close: () => void
 ): Array<ColorModeLink> => {
   return items.map(
-    (i: ColorModeItem): ColorModeLink => ({
+    (i: ColorModeItem, index: number): ColorModeLink => ({
       id: i.id,
       title: i.name,
       onClick: (): void => {
-        if (i.id !== currentId) {
-          set(i.id)
+        if (currentIndex !== index) {
+          set(index)
         }
         close()
       },
