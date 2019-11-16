@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { PREVIEW_KEYDOWN } from '@storybook/core-events'
 import { ColorModeChannel } from './models'
 import { Key } from './keycodes'
-import { NEXT_MODE } from './constants'
+import { NEXT_MODE, CHANGE_MODE_INDEX } from './constants'
 
 export const useKeyCode = (channel: ColorModeChannel): void => {
   useEffect(() => {
@@ -10,10 +10,14 @@ export const useKeyCode = (channel: ColorModeChannel): void => {
       const { altKey, ctrlKey, keyCode } = event
       const prefix = altKey && ctrlKey
 
-      if (prefix && keyCode == Key.LeftArrow) {
-        channel.emit<number>(NEXT_MODE, -1)
-      } else if (prefix && keyCode == Key.RightArrow) {
-        channel.emit<number>(NEXT_MODE, 1)
+      if (prefix) {
+        if (keyCode === Key.LeftArrow) {
+          channel.emit<number>(NEXT_MODE, -1)
+        } else if (keyCode === Key.RightArrow) {
+          channel.emit<number>(NEXT_MODE, 1)
+        } else if (keyCode >= Key.Zero && keyCode <= Key.Nine) {
+          channel.emit<number>(CHANGE_MODE_INDEX, keyCode - Key.Zero)
+        }
       }
     }
 

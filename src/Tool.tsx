@@ -15,6 +15,7 @@ import {
   DEFAULT_MODE_ID,
   TOOL_TIP_TITLE,
   NEXT_MODE,
+  CHANGE_MODE_INDEX,
 } from './constants'
 import {
   ColorModeAddonState,
@@ -61,6 +62,20 @@ export const ColorModeTool: React.FC<ColorModeToolProps> = (
   useEffect(() => {
     props.channel.emit<string>(CHANGE_MODE, list[state.currentIndex].id)
   }, [list, props.channel, state.currentIndex])
+
+  useEffect(() => {
+    const handleGoToIndex = (index: number): void => {
+      if (index < list.length && index >= 0 && index !== state.currentIndex) {
+        setState({ currentIndex: index })
+      }
+    }
+
+    props.channel.addListener<number>(CHANGE_MODE_INDEX, handleGoToIndex)
+
+    return (): void => {
+      props.channel.removeListener<number>(CHANGE_MODE_INDEX, handleGoToIndex)
+    }
+  }, [list.length, props.channel, setState, state.currentIndex])
 
   useEffect(() => {
     const handleNextMode = (amount: number): void => {
