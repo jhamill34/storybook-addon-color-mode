@@ -4,16 +4,16 @@ import { ColorModeChannel } from '../models'
 import { CHANGE_MODE } from '../constants'
 import { isElementDirty, makeDirty, setThemeUIClass } from '../utils'
 
-interface ColorModeObserverProps {
+type ColorModeObserverProps = {
   children: React.ReactNode
   channel: ColorModeChannel
   initialMode: string
   theme: Theme
 }
 
-const BaseColorModeObserver: React.FC<ColorModeObserverProps> = (
+function BaseColorModeObserver(
   props: ColorModeObserverProps
-) => {
+): React.ReactElement {
   // If a theme-ui-<something> class exists don't set anything
   useEffect(() => {
     if (!isElementDirty(document.body)) {
@@ -24,7 +24,7 @@ const BaseColorModeObserver: React.FC<ColorModeObserverProps> = (
 
   // Replace the current theme-ui class with the new one
   useEffect(() => {
-    const handleEvent = (mode: string): void => {
+    function handleEvent(mode: string): void {
       setThemeUIClass(document.body, mode)
     }
 

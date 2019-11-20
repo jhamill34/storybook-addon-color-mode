@@ -32,11 +32,12 @@ module.exports = {
     "emotion/no-vanilla": "error",
     "emotion/import-from-emotion": "error",
     "emotion/styled-import": "error",
-    "emotion/syntax-preference": [2, "string"],
+    "emotion/syntax-preference": [2, "object"],
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
     "import/order": "error",
-    "import/no-default-export": "error"
+    "import/no-default-export": "error",
+    "func-style": ["error", "declaration"]
   },
   settings: {
     react: {

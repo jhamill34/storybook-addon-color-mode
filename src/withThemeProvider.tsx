@@ -8,29 +8,28 @@ import { Theme } from 'theme-ui'
 import { ColorModeObserver } from './components/ColorModeObserver'
 import { ColorModeAddonParams } from './models'
 
-export const makeWrapperWithTheme = (theme: Theme): StoryWrapper => (
-  story,
-  context,
-  settings
-): JSX.Element => {
-  const channel = addons.getChannel()
-  const params = settings.parameters as ColorModeAddonParams
+export function makeWrapperWithTheme(theme: Theme): StoryWrapper {
+  return function wrapper(story, context, settings): JSX.Element {
+    const channel = addons.getChannel()
+    const params = settings.parameters as ColorModeAddonParams
 
-  return (
-    <ColorModeObserver
-      initialMode={params.defaultMode}
-      theme={theme}
-      channel={channel}
-    >
-      {story(context)}
-    </ColorModeObserver>
-  )
+    return (
+      <ColorModeObserver
+        initialMode={params.defaultMode}
+        theme={theme}
+        channel={channel}
+      >
+        {story(context)}
+      </ColorModeObserver>
+    )
+  }
 }
 
-export const withThemeProvider = (theme: Theme): MakeDecoratorResult =>
-  makeDecorator({
+export function withThemeProvider(theme: Theme): MakeDecoratorResult {
+  return makeDecorator({
     name: 'withThemeProvider',
     parameterName: 'colorMode',
     skipIfNoParametersOrOptions: false,
     wrapper: makeWrapperWithTheme(theme),
   })
+}

@@ -7,30 +7,30 @@ import { Key } from './keycodes'
 
 type KeyboardHandler = (event: KeyboardEvent) => void
 
-export const createKeyCodeHandler = (
+export function createKeyCodeHandler(
   hook: ColorModeAddonHook
-): KeyboardHandler => (event: KeyboardEvent): void => {
-  const { ctrlKey, altKey, keyCode } = event
-  const prefix = ctrlKey && altKey
+): KeyboardHandler {
+  return function keyCodeHandler(event: KeyboardEvent): void {
+    const { ctrlKey, altKey, keyCode } = event
+    const prefix = ctrlKey && altKey
 
-  if (prefix) {
-    if (keyCode === Key.LeftArrow) {
-      hook.prevIndex()
-    } else if (keyCode === Key.RightArrow) {
-      hook.nextIndex()
-    } else if (keyCode >= Key.Zero && keyCode <= Key.Nine) {
-      hook.setIndex(keyCode - Key.Zero)
+    if (prefix) {
+      if (keyCode === Key.LeftArrow) {
+        hook.prevIndex()
+      } else if (keyCode === Key.RightArrow) {
+        hook.nextIndex()
+      } else if (keyCode >= Key.Zero && keyCode <= Key.Nine) {
+        hook.setIndex(keyCode - Key.Zero)
+      }
     }
   }
 }
 
-export const useKeyCode = (
-  handleEvent: (event: KeyboardEvent) => void
-): void => {
+export function useKeyCode(handleEvent: (event: KeyboardEvent) => void): void {
   const channel: ColorModeChannel = addons.getChannel()
 
   useEffect(() => {
-    const channelHandleEvent = (args: { event: KeyboardEvent }): void => {
+    function channelHandleEvent(args: { event: KeyboardEvent }): void {
       handleEvent(args.event)
     }
 

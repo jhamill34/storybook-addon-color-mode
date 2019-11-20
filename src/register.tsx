@@ -5,7 +5,10 @@ import { ColorModeTool } from './Tool'
 import { ADDON_ID, PARAM_KEY } from './constants'
 
 addons.register(ADDON_ID, () => {
-  const render = (): JSX.Element => <ColorModeTool />
+  function render(): JSX.Element {
+    return <ColorModeTool />
+  }
+
   const title = 'Color Mode'
 
   addons.add(ADDON_ID, {

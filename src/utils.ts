@@ -15,7 +15,7 @@ const defaultMode: ColorModeItem = {
  *
  * @param map Provided color mode map
  */
-export const toList = (map: ColorModeMap): Array<ColorModeItem> => {
+export function toList(map: ColorModeMap): ColorModeItem[] {
   return [
     defaultMode,
     ...Object.entries(map).map(
@@ -36,12 +36,12 @@ export const toList = (map: ColorModeMap): Array<ColorModeItem> => {
  * @param set How the modes will get selected
  * @param close Callback for when the link is closed
  */
-export const toLinks = (
+export function toLinks(
   items: Array<ColorModeItem>,
   currentIndex: number,
   set: (index: number) => void,
   close: () => void
-): Array<ColorModeLink> => {
+): ColorModeLink[] {
   return items.map(
     (i: ColorModeItem, index: number): ColorModeLink => ({
       id: i.id,
@@ -62,7 +62,7 @@ export const toLinks = (
  *
  * @param element Provided element
  */
-export const isElementDirty = (element: HTMLElement): boolean => {
+export function isElementDirty(element: HTMLElement): boolean {
   return element.classList.contains(DIRTY_CLASS)
 }
 
@@ -71,7 +71,7 @@ export const isElementDirty = (element: HTMLElement): boolean => {
  *
  * @param element provided element
  */
-export const makeDirty = (element: HTMLElement): void => {
+export function makeDirty(element: HTMLElement): void {
   element.classList.add(DIRTY_CLASS)
 }
 
@@ -82,10 +82,7 @@ export const makeDirty = (element: HTMLElement): void => {
  * @param element root element for theme-ui
  * @param newMode the mode to set
  */
-export const setThemeUIClass = (
-  element: HTMLElement,
-  newMode: string
-): void => {
+export function setThemeUIClass(element: HTMLElement, newMode: string): void {
   const oldClassName = element.className
   const themeUIRegex = /theme-ui-[\w-]+/
   const newClassName = `theme-ui-${newMode}`

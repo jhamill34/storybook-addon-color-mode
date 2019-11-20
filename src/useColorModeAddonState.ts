@@ -11,10 +11,10 @@ export interface ColorModeAddonHook extends ColorModeAddonState {
   prevIndex: () => void
 }
 
-export const useColorModeAddonState = (
+export function useColorModeAddonState(
   list: ColorModeItem[],
   defaultMode: string
-): ColorModeAddonHook => {
+): ColorModeAddonHook {
   const defaultIndex = React.useMemo(
     () => list.findIndex(m => m.id === defaultMode),
     [defaultMode, list]
@@ -26,13 +26,13 @@ export const useColorModeAddonState = (
     currentIndex: defaultIndex,
   })
 
-  const setIndex = (newIndex: number): void => {
+  function setIndex(newIndex: number): void {
     setState({
       currentIndex: newIndex,
     })
   }
 
-  const nextIndex = (): void => {
+  function nextIndex(): void {
     const newIndex = state.currentIndex + 1
     if (newIndex > list.length - 1) {
       setState({
@@ -45,7 +45,7 @@ export const useColorModeAddonState = (
     }
   }
 
-  const prevIndex = (): void => {
+  function prevIndex(): void {
     const newIndex = state.currentIndex - 1
     if (newIndex < 0) {
       setState({
