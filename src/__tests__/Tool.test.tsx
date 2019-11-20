@@ -1,7 +1,7 @@
 import React from 'react'
 import { render } from '@testing-library/react'
 import { ThemeProvider, convert } from '@storybook/theming'
-import { ColorModeTool } from '../Tool'
+import { ColorModeTool } from '../ColorModeTool'
 import { ColorModeChannel } from '../models'
 
 const mockChannel: ColorModeChannel = {

@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react'
 import { Styled, ColorMode, Theme, ThemeProvider } from 'theme-ui'
-import { ColorModeChannel } from '../models'
-import { CHANGE_MODE } from '../constants'
-import { isElementDirty, makeDirty, setThemeUIClass } from '../utils'
+import { ColorModeChannel } from './models'
+import { CHANGE_MODE } from './constants'
+import { isElementDirty, makeDirty, setThemeUIClass } from './utils'
 
 type ColorModeObserverProps = {
   children: React.ReactNode

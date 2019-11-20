@@ -5,7 +5,7 @@ import addons, {
   StoryWrapper,
 } from '@storybook/addons'
 import { Theme } from 'theme-ui'
-import { ColorModeObserver } from './components/ColorModeObserver'
+import { ColorModeObserver } from './ColorModeObserver'
 import { ColorModeAddonParams } from './models'
 
 export function makeWrapperWithTheme(theme: Theme): StoryWrapper {
