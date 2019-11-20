@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { PREVIEW_KEYDOWN } from '@storybook/core-events'
-import { ColorModeChannel } from './models'
 import { addons } from '@storybook/addons'
+import { ColorModeChannel } from './models'
 import { ColorModeAddonHook } from './useColorModeAddonState'
 import { Key } from './keycodes'
 

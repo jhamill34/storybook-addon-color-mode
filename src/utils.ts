@@ -87,7 +87,7 @@ export const setThemeUIClass = (
   newMode: string
 ): void => {
   const oldClassName = element.className
-  const themeUIRegex = /theme-ui-[\w\-]+/
+  const themeUIRegex = /theme-ui-[\w-]+/
   const newClassName = `theme-ui-${newMode}`
 
   if (themeUIRegex.test(oldClassName)) {

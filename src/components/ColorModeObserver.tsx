@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
-import { ColorModeChannel } from '../models'
 import { Styled, ColorMode, Theme, ThemeProvider } from 'theme-ui'
+import { ColorModeChannel } from '../models'
 import { CHANGE_MODE } from '../constants'
 import { isElementDirty, makeDirty, setThemeUIClass } from '../utils'
 

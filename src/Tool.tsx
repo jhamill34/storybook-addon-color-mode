@@ -6,6 +6,7 @@ import {
   TooltipLinkList,
 } from '@storybook/components'
 import { styled } from '@storybook/theming'
+import { useParameter } from '@storybook/api'
 import { toList, toLinks } from './utils'
 import { TOOL_TIP_TITLE, DEFAULT_MODE_ID, PARAM_KEY } from './constants'
 import {
@@ -14,7 +15,6 @@ import {
 } from './useColorModeAddonState'
 import { useKeyCode, createKeyCodeHandler } from './useKeyCode'
 import { ColorModeAddonParams } from './models'
-import { useParameter } from '@storybook/api'
 
 const IconButtonWithLabel = styled(IconButton)`
   display: flex;

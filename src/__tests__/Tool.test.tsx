@@ -1,19 +1,8 @@
 import React from 'react'
 import { render } from '@testing-library/react'
-import { ColorModeTool } from '../Tool'
-
-/**
- * Storybook Components require a theme provider
- * to provide props to styled components in emotion.
- */
 import { ThemeProvider, convert } from '@storybook/theming'
+import { ColorModeTool } from '../Tool'
 import { ColorModeChannel } from '../models'
-
-/**
- * Mock out the useAddonState and useParameter
- * so we don't need to worry about not having
- * the context created from `useStorybookApi()`
- */
 
 const mockChannel: ColorModeChannel = {
   emit: jest.fn(),
