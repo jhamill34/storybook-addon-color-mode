@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import {
   WithTooltip,
   IconButton,
@@ -6,23 +6,13 @@ import {
   TooltipLinkList,
 } from '@storybook/components'
 import { styled } from '@storybook/theming'
-import { useAddonState, useParameter } from '@storybook/api'
 import { toList, toLinks } from './utils'
-import {
-  ADDON_ID,
-  PARAM_KEY,
-  CHANGE_MODE,
-  DEFAULT_MODE_ID,
-  TOOL_TIP_TITLE,
-  NEXT_MODE,
-  CHANGE_MODE_INDEX,
-} from './constants'
-import {
-  ColorModeAddonState,
-  ColorModeAddonParams,
-  ColorModeChannel,
-} from './models'
+import { TOOL_TIP_TITLE, DEFAULT_MODE_ID, PARAM_KEY } from './constants'
+import { useColorModeAddonState } from './useColorModeAddonState'
 import { useKeyCode } from './useKeyCode'
+import { Key } from './keycodes'
+import { ColorModeAddonParams } from './models'
+import { useParameter } from '@storybook/api'
 
 const IconButtonWithLabel = styled(IconButton)`
   display: flex;
@@ -33,69 +23,38 @@ const IconButtonLabel = styled.div`
   margin-left: 1em;
 `
 
-interface ColorModeToolProps {
-  channel: ColorModeChannel
-}
-
-export const ColorModeTool: React.FC<ColorModeToolProps> = (
-  props: ColorModeToolProps
-) => {
+export const ColorModeTool: React.FC = () => {
   const { modes, defaultMode } = useParameter<ColorModeAddonParams>(PARAM_KEY, {
     modes: {},
     defaultMode: DEFAULT_MODE_ID,
   })
+  const list = React.useMemo(() => toList(modes), [modes])
 
-  const list = toList(modes)
+  const {
+    currentIndex,
+    setIndex,
+    nextIndex,
+    prevIndex,
+  } = useColorModeAddonState(list, defaultMode)
 
-  const [state, setState] = useAddonState<ColorModeAddonState>(ADDON_ID, {
-    currentIndex: list.findIndex(m => m.id === defaultMode),
-  })
+  const keyboardHandler = (event: KeyboardEvent): void => {
+    const { ctrlKey, altKey, keyCode } = event
+    const prefix = ctrlKey && altKey
 
-  const active = state.currentIndex > 0
-
-  const updateMode = (index: number): void => {
-    setState({ currentIndex: index })
+    if (prefix) {
+      if (keyCode === Key.LeftArrow) {
+        prevIndex()
+      } else if (keyCode === Key.RightArrow) {
+        nextIndex()
+      } else if (keyCode >= Key.Zero && keyCode <= Key.Nine) {
+        setIndex(keyCode - Key.Zero)
+      }
+    }
   }
 
-  useKeyCode(props.channel)
+  useKeyCode(keyboardHandler)
 
-  useEffect(() => {
-    props.channel.emit<string>(CHANGE_MODE, list[state.currentIndex].id)
-  }, [list, props.channel, state.currentIndex])
-
-  useEffect(() => {
-    const handleGoToIndex = (index: number): void => {
-      if (index < list.length && index >= 0 && index !== state.currentIndex) {
-        setState({ currentIndex: index })
-      }
-    }
-
-    props.channel.addListener<number>(CHANGE_MODE_INDEX, handleGoToIndex)
-
-    return (): void => {
-      props.channel.removeListener<number>(CHANGE_MODE_INDEX, handleGoToIndex)
-    }
-  }, [list.length, props.channel, setState, state.currentIndex])
-
-  useEffect(() => {
-    const handleNextMode = (amount: number): void => {
-      let computedIndex = (state.currentIndex + amount) % list.length
-
-      if (computedIndex < 0) {
-        computedIndex = list.length - 1
-      }
-
-      setState({
-        currentIndex: computedIndex,
-      })
-    }
-
-    props.channel.addListener<number>(NEXT_MODE, handleNextMode)
-
-    return (): void => {
-      props.channel.removeListener<number>(NEXT_MODE, handleNextMode)
-    }
-  }, [list.length, props.channel, setState, state.currentIndex])
+  const active = currentIndex !== 0
 
   return (
     <WithTooltip
@@ -103,7 +62,7 @@ export const ColorModeTool: React.FC<ColorModeToolProps> = (
       trigger="click"
       tooltip={({ onHide }): React.ReactNode => (
         <TooltipLinkList
-          links={toLinks(list, state.currentIndex, updateMode, onHide)}
+          links={toLinks(list, currentIndex, setIndex, onHide)}
         />
       )}
       closeOnClick
@@ -112,12 +71,12 @@ export const ColorModeTool: React.FC<ColorModeToolProps> = (
         active={active}
         title={TOOL_TIP_TITLE}
         onDoubleClick={(): void => {
-          updateMode(0)
+          setIndex(0)
         }}
       >
         <Icons icon="category" />
         {active ? (
-          <IconButtonLabel>{list[state.currentIndex].name}</IconButtonLabel>
+          <IconButtonLabel>{list[currentIndex].name}</IconButtonLabel>
         ) : null}
       </IconButtonWithLabel>
     </WithTooltip>
