@@ -4,7 +4,7 @@ import { addons } from '@storybook/addons'
 import { ColorModeAddonState, ColorModeItem, ColorModeChannel } from './models'
 import { ADDON_ID, CHANGE_MODE } from './constants'
 
-interface ColorModeAddonHook extends ColorModeAddonState {
+export interface ColorModeAddonHook extends ColorModeAddonState {
   list: ColorModeItem[]
   setIndex: (newIndex: number) => void
   nextIndex: () => void

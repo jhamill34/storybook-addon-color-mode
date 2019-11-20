@@ -8,9 +8,11 @@ import {
 import { styled } from '@storybook/theming'
 import { toList, toLinks } from './utils'
 import { TOOL_TIP_TITLE, DEFAULT_MODE_ID, PARAM_KEY } from './constants'
-import { useColorModeAddonState } from './useColorModeAddonState'
-import { useKeyCode } from './useKeyCode'
-import { Key } from './keycodes'
+import {
+  useColorModeAddonState,
+  ColorModeAddonHook,
+} from './useColorModeAddonState'
+import { useKeyCode, createKeyCodeHandler } from './useKeyCode'
 import { ColorModeAddonParams } from './models'
 import { useParameter } from '@storybook/api'
 
@@ -30,31 +32,13 @@ export const ColorModeTool: React.FC = () => {
   })
   const list = React.useMemo(() => toList(modes), [modes])
 
-  const {
-    currentIndex,
-    setIndex,
-    nextIndex,
-    prevIndex,
-  } = useColorModeAddonState(list, defaultMode)
+  const hook: ColorModeAddonHook = useColorModeAddonState(list, defaultMode)
 
-  const keyboardHandler = (event: KeyboardEvent): void => {
-    const { ctrlKey, altKey, keyCode } = event
-    const prefix = ctrlKey && altKey
-
-    if (prefix) {
-      if (keyCode === Key.LeftArrow) {
-        prevIndex()
-      } else if (keyCode === Key.RightArrow) {
-        nextIndex()
-      } else if (keyCode >= Key.Zero && keyCode <= Key.Nine) {
-        setIndex(keyCode - Key.Zero)
-      }
-    }
-  }
+  const keyboardHandler = createKeyCodeHandler(hook)
 
   useKeyCode(keyboardHandler)
 
-  const active = currentIndex !== 0
+  const active = hook.currentIndex !== 0
 
   return (
     <WithTooltip
@@ -62,21 +46,15 @@ export const ColorModeTool: React.FC = () => {
       trigger="click"
       tooltip={({ onHide }): React.ReactNode => (
         <TooltipLinkList
-          links={toLinks(list, currentIndex, setIndex, onHide)}
+          links={toLinks(list, hook.currentIndex, hook.setIndex, onHide)}
         />
       )}
       closeOnClick
     >
-      <IconButtonWithLabel
-        active={active}
-        title={TOOL_TIP_TITLE}
-        onDoubleClick={(): void => {
-          setIndex(0)
-        }}
-      >
+      <IconButtonWithLabel active={active} title={TOOL_TIP_TITLE}>
         <Icons icon="category" />
         {active ? (
-          <IconButtonLabel>{list[currentIndex].name}</IconButtonLabel>
+          <IconButtonLabel>{list[hook.currentIndex].name}</IconButtonLabel>
         ) : null}
       </IconButtonWithLabel>
     </WithTooltip>
