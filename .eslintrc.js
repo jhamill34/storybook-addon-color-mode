@@ -25,7 +25,8 @@ module.exports = {
   },
   plugins: [
     "react-hooks",
-    "emotion"
+    "emotion",
+    "eslint-plugin-tsdoc"
   ],
   rules: {
     "emotion/jsx-import": "error",
@@ -37,7 +38,9 @@ module.exports = {
     "react-hooks/exhaustive-deps": "warn",
     "import/order": "error",
     "import/no-default-export": "error",
-    "func-style": ["error", "declaration"]
+    "func-style": ["error", "declaration"],
+    "require-jsdoc": "error",
+    "tsdoc/syntax": "error"
   },
   settings: {
     react: {

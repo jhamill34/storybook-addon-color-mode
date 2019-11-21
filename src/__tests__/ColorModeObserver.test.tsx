@@ -1,6 +1,6 @@
 import React from 'react'
 import { render, act } from '@testing-library/react'
-import { ColorModeObserver } from '../ColorModeObserver'
+import { ColorModeObserver } from '../components/ColorModeObserver'
 import { ColorModeChannel } from '../models'
 import { CHANGE_MODE } from '../constants'
 

@@ -1,3 +1,4 @@
+// eslint-disable-next-line tsdoc/syntax
 /** @jsx jsx */
 import { jsx } from '@emotion/core'
 import React from 'react'
@@ -8,15 +9,21 @@ import {
   TooltipLinkList,
 } from '@storybook/components'
 import { useParameter } from '@storybook/api'
-import { toList, toLinks } from './utils'
-import { TOOL_TIP_TITLE, DEFAULT_MODE_ID, PARAM_KEY } from './constants'
+import { toList, toLinks } from '../utils'
+import { TOOL_TIP_TITLE, DEFAULT_MODE_ID, PARAM_KEY } from '../constants'
 import {
   useColorModeAddonState,
   ColorModeAddonHook,
-} from './useColorModeAddonState'
-import { useKeyCode, createKeyCodeHandler } from './useKeyCode'
-import { ColorModeAddonParams } from './models'
+} from '../hooks/useColorModeAddonState'
+import { useKeyCode, createKeyCodeHandler } from '../hooks/useKeyCode'
+import { ColorModeAddonParams } from '../models'
 
+/**
+ * Provides interface in UI to be able to change the color mode
+ * with a dropdown menu. Color modes can also be changed with the
+ * use of keyboard short cuts (Default: Ctrl + Alt + action)
+ * Actions include Left and Right arrow keys and number keys.
+ */
 export function ColorModeTool(): React.ReactElement {
   const { modes, defaultMode } = useParameter<ColorModeAddonParams>(PARAM_KEY, {
     modes: {},

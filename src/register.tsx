@@ -1,10 +1,13 @@
 import React from 'react'
 import { addons, types } from '@storybook/addons'
 
-import { ColorModeTool } from './ColorModeTool'
+import { ColorModeTool } from './components/ColorModeTool'
 import { ADDON_ID, PARAM_KEY } from './constants'
 
 addons.register(ADDON_ID, () => {
+  /**
+   * @returns the element to represent our tool
+   */
   function render(): JSX.Element {
     return <ColorModeTool />
   }

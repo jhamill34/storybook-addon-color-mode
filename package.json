@@ -20,6 +20,7 @@
     "lint": "eslint --ignore-path .gitignore \"*/**/*.{js,ts,tsx}\"",
     "prepublish": "yarn run build",
     "test": "jest",
+    "docs": "typedoc",
     "semantic-release": "semantic-release"
   },
   "dependencies": {
@@ -51,6 +52,7 @@
     "eslint-plugin-react": "^7.16.0",
     "eslint-plugin-react-hooks": "^2.2.0",
     "eslint-plugin-testing-library": "^1.3.2",
+    "eslint-plugin-tsdoc": "^0.2.0",
     "husky": "^3.0.9",
     "jest": "^24.9.0",
     "jest-emotion": "^10.0.17",
@@ -61,6 +63,7 @@
     "semantic-release": "^15.13.30",
     "theme-ui": "^0.2.46",
     "ts-jest": "^24.1.0",
+    "typedoc": "^0.15.2",
     "typescript": "^3.7.2"
   },
   "peerDependencies": {
