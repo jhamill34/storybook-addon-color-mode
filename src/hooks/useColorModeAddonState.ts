@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useAddonState } from '@storybook/api'
 import { addons } from '@storybook/addons'
 import { ColorModeAddonState, ColorModeItem, ColorModeChannel } from '../models'
@@ -9,7 +9,6 @@ export type IndexStepper = () => void
 
 export type ColorModeAddonHook = {
   currentIndex: number
-  list: ColorModeItem[]
   setIndex: IndexSetter
   nextIndex: IndexStepper
   prevIndex: IndexStepper
@@ -19,18 +18,13 @@ export type ColorModeAddonHook = {
  * Custom React hook that provides useful methods to manage the
  * current color mode presented.
  * @param list - color mode items to use
- * @param defaultMode - the default mode
+ * @param defaultIndex - the default index to use
  * @returns fields used to interact with hook
  */
 export function useColorModeAddonState(
   list: ColorModeItem[],
-  defaultMode: string
+  defaultIndex: number
 ): ColorModeAddonHook {
-  const defaultIndex = React.useMemo(
-    () => list.findIndex(m => m.id === defaultMode),
-    [defaultMode, list]
-  )
-
   const channel: ColorModeChannel = addons.getChannel()
 
   const [state, setState] = useAddonState<ColorModeAddonState>(ADDON_ID, {
@@ -93,7 +87,6 @@ export function useColorModeAddonState(
 
   return {
     currentIndex,
-    list,
     setIndex,
     nextIndex,
     prevIndex,

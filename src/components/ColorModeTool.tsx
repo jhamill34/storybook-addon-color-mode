@@ -1,7 +1,7 @@
 // eslint-disable-next-line tsdoc/syntax
 /** @jsx jsx */
 import { jsx } from '@emotion/core'
-import React from 'react'
+import React, { useMemo } from 'react'
 import {
   WithTooltip,
   IconButton,
@@ -29,15 +29,24 @@ export function ColorModeTool(): React.ReactElement {
     modes: {},
     defaultMode: DEFAULT_MODE_ID,
   })
-  const list = React.useMemo(() => toList(modes), [modes])
 
-  const hook: ColorModeAddonHook = useColorModeAddonState(list, defaultMode)
+  const list = useMemo(() => toList(modes), [modes])
+  const defaultIndex = useMemo(
+    () => list.findIndex(m => m.id === defaultMode),
+    [defaultMode, list]
+  )
 
-  const keyboardHandler = createKeyCodeHandler(hook)
+  const {
+    currentIndex,
+    prevIndex,
+    nextIndex,
+    setIndex,
+  }: ColorModeAddonHook = useColorModeAddonState(list, defaultIndex)
 
+  const keyboardHandler = createKeyCodeHandler(prevIndex, nextIndex, setIndex)
   useKeyCode(keyboardHandler)
 
-  const active = hook.currentIndex !== 0
+  const active = currentIndex !== 0
 
   return (
     <WithTooltip
@@ -45,7 +54,7 @@ export function ColorModeTool(): React.ReactElement {
       trigger="click"
       tooltip={({ onHide }): React.ReactNode => (
         <TooltipLinkList
-          links={toLinks(list, hook.currentIndex, hook.setIndex, onHide)}
+          links={toLinks(list, currentIndex, setIndex, onHide)}
         />
       )}
       closeOnClick
@@ -65,7 +74,7 @@ export function ColorModeTool(): React.ReactElement {
               marginLeft: '1em',
             }}
           >
-            {list[hook.currentIndex].name}
+            {list[currentIndex].name}
           </div>
         ) : null}
       </IconButton>

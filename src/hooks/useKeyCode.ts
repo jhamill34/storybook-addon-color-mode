@@ -3,7 +3,7 @@ import { PREVIEW_KEYDOWN } from '@storybook/core-events'
 import { addons } from '@storybook/addons'
 import { ColorModeChannel } from '../models'
 import { Key } from '../keycodes'
-import { ColorModeAddonHook } from './useColorModeAddonState'
+import { IndexStepper, IndexSetter } from './useColorModeAddonState'
 
 type KeyboardHandler = {
   /**
@@ -18,12 +18,16 @@ type KeyboardHandler = {
 /**
  * Factory method for creating a keyboard handler method.
  *
- * @param  hook - fields from the result of a `useColorModeAddonState()` call
+ * @param prevIndex - function for handling how to move to the previous mode
+ * @param nextIndex - function for handling how to move to the next mode
+ * @param setIndex - function for handling how to move any mode
  * @returns resulting function closed around hook that
  *  is called when keyboard events are triggered.
  */
 export function createKeyCodeHandler(
-  hook: ColorModeAddonHook
+  prevIndex: IndexStepper,
+  nextIndex: IndexStepper,
+  setIndex: IndexSetter
 ): KeyboardHandler {
   return function keyCodeHandler(event: KeyboardEvent): void {
     const { ctrlKey, altKey, keyCode } = event
@@ -31,11 +35,11 @@ export function createKeyCodeHandler(
 
     if (prefix) {
       if (keyCode === Key.LeftArrow) {
-        hook.prevIndex()
+        prevIndex()
       } else if (keyCode === Key.RightArrow) {
-        hook.nextIndex()
+        nextIndex()
       } else if (keyCode >= Key.Zero && keyCode <= Key.Nine) {
-        hook.setIndex(keyCode - Key.Zero)
+        setIndex(keyCode - Key.Zero)
       }
     }
   }

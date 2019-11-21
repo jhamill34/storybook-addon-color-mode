@@ -33,13 +33,14 @@ type ColorModeObserverProps = {
 function BaseColorModeObserver(
   props: ColorModeObserverProps
 ): React.ReactElement {
+  const { channel, initialMode, theme, children } = props
   // If a theme-ui-<something> class exists don't set anything
   useEffect(() => {
     if (!isElementDirty(document.body)) {
-      setThemeUIClass(document.body, props.initialMode)
+      setThemeUIClass(document.body, initialMode)
       makeDirty(document.body)
     }
-  }, [props.initialMode])
+  }, [initialMode])
 
   // Replace the current theme-ui class with the new one
   useEffect(() => {
@@ -51,17 +52,17 @@ function BaseColorModeObserver(
       setThemeUIClass(document.body, mode)
     }
 
-    props.channel.addListener<string>(CHANGE_MODE, handleEvent)
+    channel.addListener<string>(CHANGE_MODE, handleEvent)
 
     return (): void => {
-      props.channel.removeListener<string>(CHANGE_MODE, handleEvent)
+      channel.removeListener<string>(CHANGE_MODE, handleEvent)
     }
-  }, [props.channel])
+  }, [channel])
 
   return (
-    <ThemeProvider theme={props.theme}>
+    <ThemeProvider theme={theme}>
       <ColorMode />
-      <Styled.root>{props.children}</Styled.root>
+      <Styled.root>{children}</Styled.root>
     </ThemeProvider>
   )
 }
