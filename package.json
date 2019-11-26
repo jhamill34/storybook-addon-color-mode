@@ -4,6 +4,12 @@
     "name": "Joshua Rasmussen",
     "email": "joshrasmussen34@gmail.com"
   },
+  "keywords": [
+    "storybook",
+    "addon",
+    "typescript",
+    "theme-ui"
+  ],
   "version": "0.0.0-development",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -11,7 +17,8 @@
   "files": [
     "dist/**/*",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "register.js"
   ],
   "scripts": {
     "build": "tsc",
