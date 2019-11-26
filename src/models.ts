@@ -1,3 +1,5 @@
+import { Key } from './keycodes'
+
 export interface ColorModeItem {
   /**
    * Key referenced in theme-ui's color mode
@@ -42,6 +44,11 @@ export type ColorModeAddonParams = {
    * be rendered initially
    */
   defaultMode: string
+
+  /**
+   *
+   */
+  bindings: KeyBinding
 }
 
 export interface ColorModeLink {
@@ -59,4 +66,33 @@ export interface ColorModeLink {
    * Action to take when the mode is selected
    */
   onClick: () => void
+}
+
+/**
+ * Configuration to outline a common keybinding prefix
+ * for triggering events.
+ */
+export type KeyBindingPrefix = {
+  /** Set true if Control (^ or Ctrl) Key is part of prefix */
+  ctrlKey: boolean
+
+  /** Set true if Alt (or Option) Key is part of prefix */
+  altKey: boolean
+
+  /** Set true if Shift Key is part of prefix */
+  shiftKey: boolean
+}
+
+/**
+ * Complete configuration for keybindings
+ */
+export type KeyBinding = {
+  /** See [[KeyBindingPrefix]] */
+  prefix: KeyBindingPrefix
+
+  /** Which keycode should trigger going to the next color mode */
+  previousTrigger: Key
+
+  /** Which keycode should trigger going to the previous color mode */
+  nextTrigger: Key
 }

@@ -3,6 +3,7 @@ import { PREVIEW_KEYDOWN } from '@storybook/core-events'
 import { addons } from '@storybook/addons'
 import Channel from '@storybook/channels'
 import { Key } from '../keycodes'
+import { KeyBinding } from '../models'
 import { IndexStepper, IndexSetter } from './useColorModeAddonState'
 
 type KeyboardHandler = {
@@ -21,25 +22,31 @@ type KeyboardHandler = {
  * @param prevIndex - function for handling how to move to the previous mode
  * @param nextIndex - function for handling how to move to the next mode
  * @param setIndex - function for handling how to move any mode
+ * @param bindings - configuration for determining when to trigger events
  * @returns resulting function closed around hook that
  *  is called when keyboard events are triggered.
  */
 export function createKeyCodeHandler(
   prevIndex: IndexStepper,
   nextIndex: IndexStepper,
-  setIndex: IndexSetter
+  setIndex: IndexSetter,
+  bindings: KeyBinding
 ): KeyboardHandler {
   return function keyCodeHandler(event: KeyboardEvent): void {
-    const { ctrlKey, altKey, keyCode } = event
-    const prefix = ctrlKey && altKey
+    const { prefix, previousTrigger, nextTrigger } = bindings
 
-    if (prefix) {
-      if (keyCode === Key.LeftArrow) {
+    const hasPrefix: boolean =
+      prefix.altKey === event.altKey &&
+      prefix.ctrlKey === event.ctrlKey &&
+      prefix.shiftKey === event.shiftKey
+
+    if (hasPrefix) {
+      if (event.keyCode === previousTrigger) {
         prevIndex()
-      } else if (keyCode === Key.RightArrow) {
+      } else if (event.keyCode === nextTrigger) {
         nextIndex()
-      } else if (keyCode >= Key.Zero && keyCode <= Key.Nine) {
-        setIndex(keyCode - Key.Zero)
+      } else if (event.keyCode >= Key.Zero && event.keyCode <= Key.Nine) {
+        setIndex(event.keyCode - Key.Zero)
       }
     }
   }

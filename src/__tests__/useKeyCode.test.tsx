@@ -4,6 +4,7 @@ import Channel, { Listener } from '@storybook/channels'
 import { PREVIEW_KEYDOWN } from '@storybook/core-events'
 import { useKeyCode, createKeyCodeHandler } from '../hooks/useKeyCode'
 import { Key } from '../keycodes'
+import { KeyBinding } from '../models'
 
 type ColorModeChannel = Pick<Channel, 'emit' | 'addListener' | 'removeListener'>
 
@@ -28,11 +29,26 @@ const mockPrev = jest.fn()
 const mockNext = jest.fn()
 const mockSet = jest.fn()
 
+const mockKeyBindings: KeyBinding = {
+  prefix: {
+    ctrlKey: true,
+    altKey: true,
+    shiftKey: false,
+  },
+  previousTrigger: Key.LeftArrow,
+  nextTrigger: Key.RightArrow,
+}
+
 /**
  * Fake component to test useKeyCode
  */
 function MockKeyCode(): React.ReactElement {
-  const keyboardHandler = createKeyCodeHandler(mockPrev, mockNext, mockSet)
+  const keyboardHandler = createKeyCodeHandler(
+    mockPrev,
+    mockNext,
+    mockSet,
+    mockKeyBindings
+  )
   useKeyCode(keyboardHandler)
   return <div>MockKeyCode</div>
 }

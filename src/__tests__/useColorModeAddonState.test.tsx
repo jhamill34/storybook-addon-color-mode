@@ -55,13 +55,6 @@ function MockColorMode(): React.ReactElement {
   )
 }
 
-/**
- * TODO: Render and trigger button clicks and observe the
- * output from the header
- * Things to keep in mind:
- *  - Make sure it wraps around for both next and prev
- *  - What if setIndex is sent a value beyond 9?
- */
 describe('useColorModeAddonState', () => {
   it('should initially render with text as Default', () => {
     const { getByTestId } = render(<MockColorMode />)
@@ -146,4 +139,8 @@ describe('useColorModeAddonState', () => {
 
     expect(header.textContent).toEqual('Super Cool')
   })
+
+  /**
+   * TODO: Check what happens on out of bounds??
+   */
 })

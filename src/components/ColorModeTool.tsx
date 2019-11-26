@@ -16,7 +16,18 @@ import {
   ColorModeAddonHook,
 } from '../hooks/useColorModeAddonState'
 import { useKeyCode, createKeyCodeHandler } from '../hooks/useKeyCode'
-import { ColorModeAddonParams } from '../models'
+import { ColorModeAddonParams, KeyBinding } from '../models'
+import { Key } from '../keycodes'
+
+const defaultBindings: KeyBinding = {
+  prefix: {
+    ctrlKey: true,
+    altKey: true,
+    shiftKey: false,
+  },
+  previousTrigger: Key.LeftArrow,
+  nextTrigger: Key.RightArrow,
+}
 
 /**
  * Provides interface in UI to be able to change the color mode
@@ -25,10 +36,14 @@ import { ColorModeAddonParams } from '../models'
  * Actions include Left and Right arrow keys and number keys.
  */
 export function ColorModeTool(): React.ReactElement {
-  const { modes, defaultMode } = useParameter<ColorModeAddonParams>(PARAM_KEY, {
-    modes: {},
-    defaultMode: DEFAULT_MODE_ID,
-  })
+  const { modes, defaultMode, bindings } = useParameter<ColorModeAddonParams>(
+    PARAM_KEY,
+    {
+      modes: {},
+      defaultMode: DEFAULT_MODE_ID,
+      bindings: defaultBindings,
+    }
+  )
 
   const list = useMemo(() => toList(modes), [modes])
   const defaultIndex = useMemo(
@@ -43,7 +58,12 @@ export function ColorModeTool(): React.ReactElement {
     setIndex,
   }: ColorModeAddonHook = useColorModeAddonState(list, defaultIndex)
 
-  const keyboardHandler = createKeyCodeHandler(prevIndex, nextIndex, setIndex)
+  const keyboardHandler = createKeyCodeHandler(
+    prevIndex,
+    nextIndex,
+    setIndex,
+    bindings
+  )
   useKeyCode(keyboardHandler)
 
   const active = currentIndex !== 0
