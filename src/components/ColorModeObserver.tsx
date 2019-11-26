@@ -1,44 +1,39 @@
-import React, { useEffect } from 'react'
-import { ColorModeChannel } from '../models'
+import React from 'react'
 import { Styled, ColorMode, Theme, ThemeProvider } from 'theme-ui'
-import { CHANGE_MODE } from '../constants'
-import { isElementDirty, makeDirty, setThemeUIClass } from '../utils'
+import { useColorMode } from '../hooks/useColorMode'
 
-interface ColorModeObserverProps {
-  children: React.ReactNode
-  channel: ColorModeChannel
+type ColorModeObserverProps = {
+  /**
+   * The mode that should be initially rendered
+   */
   initialMode: string
+
+  /**
+   * The theme object that provides styles for components
+   * that use theme-ui
+   */
   theme: Theme
+
+  /**
+   * Components rendered in the story
+   */
+  children: React.ReactNode
 }
 
-const BaseColorModeObserver: React.FC<ColorModeObserverProps> = (
+/**
+ * Wraps stories to provide theme-ui styles.
+ */
+function BaseColorModeObserver(
   props: ColorModeObserverProps
-) => {
-  // If a theme-ui-<something> class exists don't set anything
-  useEffect(() => {
-    if (!isElementDirty(document.body)) {
-      setThemeUIClass(document.body, props.initialMode)
-      makeDirty(document.body)
-    }
-  }, [props.initialMode])
+): React.ReactElement {
+  const { initialMode, theme, children } = props
 
-  // Replace the current theme-ui class with the new one
-  useEffect(() => {
-    const handleEvent = (newMode: string): void => {
-      setThemeUIClass(document.body, newMode)
-    }
-
-    props.channel.addListener(CHANGE_MODE, handleEvent)
-
-    return (): void => {
-      props.channel.removeListener(CHANGE_MODE, handleEvent)
-    }
-  }, [props.channel])
+  useColorMode(initialMode)
 
   return (
-    <ThemeProvider theme={props.theme}>
+    <ThemeProvider theme={theme}>
       <ColorMode />
-      <Styled.root>{props.children}</Styled.root>
+      <Styled.root>{children}</Styled.root>
     </ThemeProvider>
   )
 }

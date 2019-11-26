@@ -1,35 +1,47 @@
 import React from 'react'
 import { render, act } from '@testing-library/react'
+import Channel from '@storybook/channels'
 import { ColorModeObserver } from '../components/ColorModeObserver'
-import { ColorModeChannel } from '../models'
 import { CHANGE_MODE } from '../constants'
 
-const mockSetMode = jest.fn()
+type ColorModeChannel = Pick<Channel, 'emit' | 'addListener' | 'removeListener'>
 
 interface Registry {
   [key: string]: (mode: string) => void
 }
 
+const mockSetMode = jest.fn()
+const mockAddListener = jest.fn()
+const mockRemoveListener = jest.fn()
+
+jest.mock('@storybook/addons', () => ({
+  addons: {
+    getChannel: (): ColorModeChannel => ({
+      emit: jest.fn(),
+      addListener: mockAddListener,
+      removeListener: mockRemoveListener,
+    }),
+  },
+}))
+
 describe('ColorModeObserver', () => {
-  let mockChannel: ColorModeChannel
   let registry: Registry
 
   beforeEach(() => {
-    mockSetMode.mockReset()
     registry = {}
 
-    mockChannel = {
-      emit: jest.fn(),
-      addListener: jest.fn((event, callback) => {
-        registry[event] = callback
-      }),
-      removeListener: jest.fn(),
-    }
+    mockSetMode.mockReset()
+    mockAddListener.mockReset()
+    mockRemoveListener.mockReset()
+
+    mockAddListener.mockImplementation((event, callback) => {
+      registry[event] = callback
+    })
   })
 
   test('renders initial styles properly', () => {
     const { container } = render(
-      <ColorModeObserver initialMode="dark" theme={{}} channel={mockChannel}>
+      <ColorModeObserver initialMode="dark" theme={{}}>
         <h1>This is a test</h1>
       </ColorModeObserver>
     )
@@ -39,29 +51,30 @@ describe('ColorModeObserver', () => {
 
   test('a listener should be added upon mounting', () => {
     render(
-      <ColorModeObserver initialMode="dark" theme={{}} channel={mockChannel}>
+      <ColorModeObserver initialMode="dark" theme={{}}>
         <h1>This is a test</h1>
       </ColorModeObserver>
     )
 
-    expect(mockChannel.addListener).toBeCalledTimes(1)
+    expect(mockAddListener).toBeCalledTimes(1)
   })
 
   test('a listener should be removed upon unmounting', () => {
     const { unmount } = render(
-      <ColorModeObserver initialMode="dark" theme={{}} channel={mockChannel}>
+      <ColorModeObserver initialMode="dark" theme={{}}>
         <h1>This is a test</h1>
       </ColorModeObserver>
     )
 
     unmount()
 
-    expect(mockChannel.removeListener).toBeCalledTimes(1)
+    expect(mockAddListener).toBeCalledTimes(1)
+    expect(mockRemoveListener).toBeCalledTimes(1)
   })
 
   test('first render should add a default mode and mark as dirty', () => {
     render(
-      <ColorModeObserver initialMode="dark" theme={{}} channel={mockChannel}>
+      <ColorModeObserver initialMode="dark" theme={{}}>
         <h1>This is a test</h1>
       </ColorModeObserver>
     )
@@ -72,7 +85,7 @@ describe('ColorModeObserver', () => {
 
   test('emit CHANGE_MODE should set the class of the body element', () => {
     render(
-      <ColorModeObserver initialMode="dark" theme={{}} channel={mockChannel}>
+      <ColorModeObserver initialMode="dark" theme={{}}>
         <h1>This is a test</h1>
       </ColorModeObserver>
     )
@@ -88,7 +101,7 @@ describe('ColorModeObserver', () => {
 
   test('emit CHANGE_MODE should remove the class of the previous mode', () => {
     render(
-      <ColorModeObserver initialMode="dark" theme={{}} channel={mockChannel}>
+      <ColorModeObserver initialMode="dark" theme={{}}>
         <h1>This is a test</h1>
       </ColorModeObserver>
     )

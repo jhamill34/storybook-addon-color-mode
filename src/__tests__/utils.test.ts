@@ -32,7 +32,7 @@ describe('Utility Functions', () => {
 
   describe('toLinks', () => {
     let items: Array<ColorModeItem>
-    let mockSet: (id: string) => void
+    let mockSet: (id: number) => void
     let mockClose: () => void
 
     beforeEach(() => {
@@ -45,27 +45,27 @@ describe('Utility Functions', () => {
     })
 
     test('creates an empty list when no items are provided', () => {
-      const result = toLinks(items, 'default', mockSet, mockClose)
+      const result = toLinks(items, 0, mockSet, mockClose)
       expect(result).toHaveLength(2)
       expect(result[1].id).toEqual('dark')
       expect(result[1].title).toEqual('Darkness')
     })
 
     test('calls the close function when clicked', () => {
-      const result = toLinks(items, 'default', mockSet, mockClose)
+      const result = toLinks(items, 0, mockSet, mockClose)
       result[0].onClick()
       result[1].onClick()
       expect(mockClose).toHaveBeenCalledTimes(2)
     })
 
     test('calls the set function when current id is not clicked', () => {
-      const result = toLinks(items, 'default', mockSet, mockClose)
+      const result = toLinks(items, 0, mockSet, mockClose)
       result[1].onClick()
       expect(mockSet).toHaveBeenCalledTimes(1)
     })
 
     test('does not call the set function when the current id is clicked', () => {
-      const result = toLinks(items, 'default', mockSet, mockClose)
+      const result = toLinks(items, 0, mockSet, mockClose)
       result[0].onClick()
       expect(mockSet).not.toHaveBeenCalled()
     })

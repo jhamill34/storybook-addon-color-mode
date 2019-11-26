@@ -32,6 +32,7 @@ The color mode addon is configured by story parameters with the `colorMode` key.
 
 ```js
 import { addParameters } from '@storybook/react';
+import { Key } from 'storybook-addon-color-mode';
 
 addParameters({
   colorMode: {
@@ -40,7 +41,16 @@ addParameters({
         name: 'Dark'
       }
     },
-    defaultMode: 'dark'
+    defaultMode: 'dark',
+    bindings: {
+      prefix: {
+        ctrlKey: true,
+        altKey: true,
+        shiftKey: false,
+      },
+      previousTrigger: Key.LeftArrow,
+      nextTrigger: Key.RightArrow,
+    }
   },
 });
 ```
@@ -53,13 +63,12 @@ A key-value pair of color modes's key and properties (see `Color Mode Model` def
 
 #### Color Mode Model
 
-```js
-{
+```ts
+type ColorMode = {
   /**
    * name to display in the dropdown
-   * @type {String}
    */
-  name: 'Darkness',
+  name: string
 }
 ```
 
@@ -68,6 +77,53 @@ A key-value pair of color modes's key and properties (see `Color Mode Model` def
 A string representing the key that you would like to use as your default color mode. This will 
 be the color mode that will load up when your storybook starts and when you reload the page. 
 This can also be set on a per-story basis as well. 
+
+### bindings: KeyBinding
+
+Keybindings can be configured to cycle through different color modes. However, this is 
+completely optional. Keybindings are defined by a *prefix* and a *trigger* key to complete an action. 
+
+The default *prefix* is to hold down `Ctrl + Alt` (or `Control + Option` on a Mac). You can configure
+this with any combination of `Ctrl`, `Alt`, and `Shift`. 
+
+The default *trigger* keys are defined by three different actions: next, previous, and set. 
+
+| Action | Trigger Key | Configurable | 
+|:-------|:-----------:|:------------:|
+| Next Mode | `Ctrl` (`^`, `Control`) | `true` | 
+| Previous Mode | `Alt` (`Option`) | `true` |
+| Set Mode Index | # Keys (0 - 9) | `false` |
+
+```ts
+/**
+ * Configuration to outline a common keybinding prefix
+ * for triggering events.
+ */
+type KeyBindingPrefix = {
+  /** Set true if Control (^ or Ctrl) Key is part of prefix */
+  ctrlKey: boolean
+
+  /** Set true if Alt (or Option) Key is part of prefix */
+  altKey: boolean
+
+  /** Set true if Shift Key is part of prefix */
+  shiftKey: boolean
+}
+
+/**
+ * Complete configuration for keybindings
+ */
+type KeyBinding = {
+  /** See Above */
+  prefix: KeyBindingPrefix
+
+  /** Which keycode should trigger going to the next color mode */
+  previousTrigger: Key
+
+  /** Which keycode should trigger going to the previous color mode */
+  nextTrigger: Key
+}
+```
 
 ## Example
 

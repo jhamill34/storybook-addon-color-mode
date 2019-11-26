@@ -1,12 +1,17 @@
 import React from 'react'
 import { addons, types } from '@storybook/addons'
 
-import { ColorModeTool } from './Tool'
+import { ColorModeTool } from './components/ColorModeTool'
 import { ADDON_ID, PARAM_KEY } from './constants'
 
 addons.register(ADDON_ID, () => {
-  const channel = addons.getChannel()
-  const render = (): JSX.Element => <ColorModeTool channel={channel} />
+  /**
+   * @returns the element to represent our tool
+   */
+  function render(): JSX.Element {
+    return <ColorModeTool />
+  }
+
   const title = 'Color Mode'
 
   addons.add(ADDON_ID, {
