@@ -31,10 +31,10 @@ const mockSet = jest.fn()
 /**
  * Fake component to test useKeyCode
  */
-function MockComponent(): React.ReactElement {
+function MockKeyCode(): React.ReactElement {
   const keyboardHandler = createKeyCodeHandler(mockPrev, mockNext, mockSet)
   useKeyCode(keyboardHandler)
-  return <div>MockComponent</div>
+  return <div>MockKeyCode</div>
 }
 
 describe('Color Mode Hooks', () => {
@@ -56,13 +56,13 @@ describe('Color Mode Hooks', () => {
     })
 
     it('should register a listener when the component is mounted', () => {
-      render(<MockComponent />)
+      render(<MockKeyCode />)
 
       expect(mockAddListener).toHaveBeenCalledTimes(1)
     })
 
     it('should unregister a listener when the component is unmounted', () => {
-      const { unmount } = render(<MockComponent />)
+      const { unmount } = render(<MockKeyCode />)
 
       unmount()
 
@@ -71,7 +71,7 @@ describe('Color Mode Hooks', () => {
     })
 
     it('should only call next index if event is emitted and <prefix> + RightArrow', () => {
-      render(<MockComponent />)
+      render(<MockKeyCode />)
       registry[PREVIEW_KEYDOWN]({
         event: {
           ctrlKey: true,
@@ -87,7 +87,7 @@ describe('Color Mode Hooks', () => {
     })
 
     it('should only call prev index if event is emitted and <prefix> + LeftArrow', () => {
-      render(<MockComponent />)
+      render(<MockKeyCode />)
       registry[PREVIEW_KEYDOWN]({
         event: {
           ctrlKey: true,
@@ -103,7 +103,7 @@ describe('Color Mode Hooks', () => {
     })
 
     it('should only call set index if event is emitted and <prefix> + <number>', () => {
-      render(<MockComponent />)
+      render(<MockKeyCode />)
       registry[PREVIEW_KEYDOWN]({
         event: {
           ctrlKey: true,
@@ -120,7 +120,7 @@ describe('Color Mode Hooks', () => {
     })
 
     it('should not call anything if the wrong prefix is set', () => {
-      render(<MockComponent />)
+      render(<MockKeyCode />)
       registry[PREVIEW_KEYDOWN]({
         event: {
           ctrlKey: false,
@@ -136,7 +136,7 @@ describe('Color Mode Hooks', () => {
     })
 
     it('should not call anything if prefix is set but wrong key is pressed', () => {
-      render(<MockComponent />)
+      render(<MockKeyCode />)
       registry[PREVIEW_KEYDOWN]({
         event: {
           ctrlKey: true,
@@ -160,7 +160,7 @@ describe('Color Mode Hooks', () => {
     })
 
     it('should call next when <prefix> and Right Arrow is triggered on document', () => {
-      render(<MockComponent />)
+      render(<MockKeyCode />)
       fireEvent.keyDown(document, {
         ctrlKey: true,
         altKey: true,
@@ -174,7 +174,7 @@ describe('Color Mode Hooks', () => {
     })
 
     it('should call prev when <prefix> and Left Arrow is triggered on document', () => {
-      render(<MockComponent />)
+      render(<MockKeyCode />)
       fireEvent.keyDown(document, {
         ctrlKey: true,
         altKey: true,
@@ -188,7 +188,7 @@ describe('Color Mode Hooks', () => {
     })
 
     it('should call set index when <prefix> and number is triggered on document', () => {
-      render(<MockComponent />)
+      render(<MockKeyCode />)
       fireEvent.keyDown(document, {
         ctrlKey: true,
         altKey: true,
@@ -203,7 +203,7 @@ describe('Color Mode Hooks', () => {
     })
 
     it('should not call anything if the wrong prefix is set', () => {
-      render(<MockComponent />)
+      render(<MockKeyCode />)
       fireEvent.keyDown(document, {
         ctrlKey: false,
         altKey: true,
@@ -217,7 +217,7 @@ describe('Color Mode Hooks', () => {
     })
 
     it('should not call anything correct prefix is set but wrong key is pressed', () => {
-      render(<MockComponent />)
+      render(<MockKeyCode />)
       fireEvent.keyDown(document, {
         ctrlKey: true,
         altKey: true,
