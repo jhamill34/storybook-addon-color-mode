@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import Channel from '@storybook/channels'
-import addons from '@storybook/addons'
+import { addons } from '@storybook/addons'
 import { CHANGE_MODE } from '../constants'
 import { isElementDirty, makeDirty, setThemeUIClass } from '../utils'
 

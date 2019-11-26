@@ -15,11 +15,13 @@ const mockAddListener = jest.fn()
 const mockRemoveListener = jest.fn()
 
 jest.mock('@storybook/addons', () => ({
-  getChannel: (): ColorModeChannel => ({
-    emit: jest.fn(),
-    addListener: mockAddListener,
-    removeListener: mockRemoveListener,
-  }),
+  addons: {
+    getChannel: (): ColorModeChannel => ({
+      emit: jest.fn(),
+      addListener: mockAddListener,
+      removeListener: mockRemoveListener,
+    }),
+  },
 }))
 
 describe('ColorModeObserver', () => {

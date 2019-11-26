@@ -6,13 +6,19 @@ import { ColorModeTool } from '../components/ColorModeTool'
 
 type ColorModeChannel = Pick<Channel, 'emit' | 'addListener' | 'removeListener'>
 
-const mockChannel: ColorModeChannel = {
-  emit: jest.fn(),
-  addListener: jest.fn(),
-  removeListener: jest.fn(),
-}
-
 const mockSetState = jest.fn()
+const mockAddListener = jest.fn()
+const mockRemoveListener = jest.fn()
+
+jest.mock('@storybook/addons', () => ({
+  addons: {
+    getChannel: (): ColorModeChannel => ({
+      emit: jest.fn(),
+      addListener: mockAddListener,
+      removeListener: mockRemoveListener,
+    }),
+  },
+}))
 
 jest.mock('@storybook/api', () => ({
   ...jest.requireActual('@storybook/api'),
@@ -22,13 +28,6 @@ jest.mock('@storybook/api', () => ({
   useParameter: jest.fn(() => {
     return { modes: {} }
   }),
-}))
-
-jest.mock('@storybook/addons', () => ({
-  ...jest.requireActual('@storybook/addons'),
-  addons: {
-    getChannel: (): ColorModeChannel => mockChannel,
-  },
 }))
 
 describe('ColorModeTool', () => {
