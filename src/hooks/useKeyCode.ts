@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { PREVIEW_KEYDOWN } from '@storybook/core-events'
 import { addons } from '@storybook/addons'
-import { ColorModeChannel } from '../models'
+import Channel from '@storybook/channels'
 import { Key } from '../keycodes'
 import { IndexStepper, IndexSetter } from './useColorModeAddonState'
 
@@ -50,7 +50,7 @@ export function createKeyCodeHandler(
  * @param  handleEvent - function triggered on keyboard events
  */
 export function useKeyCode(handleEvent: KeyboardHandler): void {
-  const channel: ColorModeChannel = addons.getChannel()
+  const channel: Channel = addons.getChannel()
 
   useEffect(() => {
     /**
@@ -62,17 +62,11 @@ export function useKeyCode(handleEvent: KeyboardHandler): void {
       handleEvent(args.event)
     }
 
-    channel.addListener<{ event: KeyboardEvent }>(
-      PREVIEW_KEYDOWN,
-      channelHandleEvent
-    )
+    channel.addListener(PREVIEW_KEYDOWN, channelHandleEvent)
     document.addEventListener('keydown', handleEvent)
 
     return (): void => {
-      channel.removeListener<{ event: KeyboardEvent }>(
-        PREVIEW_KEYDOWN,
-        channelHandleEvent
-      )
+      channel.removeListener(PREVIEW_KEYDOWN, channelHandleEvent)
       document.removeEventListener('keydown', handleEvent)
     }
   }, [channel, handleEvent])

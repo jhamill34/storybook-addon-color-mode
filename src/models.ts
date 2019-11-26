@@ -60,13 +60,3 @@ export interface ColorModeLink {
    */
   onClick: () => void
 }
-
-// TODO: Channel model should be updatedj
-
-export type Listener<T> = (event: T) => void
-
-export interface ColorModeChannel {
-  emit<T>(event: string, args: T): void
-  addListener<T>(event: string, listener: Listener<T>): void
-  removeListener<T>(event: string, listener: Listener<T>): void
-}

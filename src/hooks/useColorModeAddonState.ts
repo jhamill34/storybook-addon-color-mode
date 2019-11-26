@@ -1,7 +1,8 @@
 import { useEffect } from 'react'
 import { useAddonState } from '@storybook/api'
 import { addons } from '@storybook/addons'
-import { ColorModeAddonState, ColorModeItem, ColorModeChannel } from '../models'
+import Channel from '@storybook/channels'
+import { ColorModeAddonState, ColorModeItem } from '../models'
 import { ADDON_ID, CHANGE_MODE } from '../constants'
 
 export type IndexSetter = (newIndex: number) => void
@@ -25,7 +26,7 @@ export function useColorModeAddonState(
   list: ColorModeItem[],
   defaultIndex: number
 ): ColorModeAddonHook {
-  const channel: ColorModeChannel = addons.getChannel()
+  const channel: Channel = addons.getChannel()
 
   const [state, setState] = useAddonState<ColorModeAddonState>(ADDON_ID, {
     currentIndex: defaultIndex,
@@ -34,7 +35,7 @@ export function useColorModeAddonState(
   const { currentIndex } = state
 
   useEffect(() => {
-    channel.emit<string>(CHANGE_MODE, list[currentIndex].id)
+    channel.emit(CHANGE_MODE, list[currentIndex].id)
   })
 
   /**

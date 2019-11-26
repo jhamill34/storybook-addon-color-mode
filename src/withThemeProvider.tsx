@@ -1,5 +1,5 @@
 import React from 'react'
-import addons, {
+import {
   makeDecorator,
   MakeDecoratorResult,
   StoryWrapper,
@@ -23,15 +23,10 @@ function makeWrapperWithTheme(theme: Theme): StoryWrapper {
     context: StoryContext,
     settings: WrapperSettings
   ): JSX.Element {
-    const channel = addons.getChannel()
     const params = settings.parameters as ColorModeAddonParams
 
     return (
-      <ColorModeObserver
-        initialMode={params.defaultMode}
-        theme={theme}
-        channel={channel}
-      >
+      <ColorModeObserver initialMode={params.defaultMode} theme={theme}>
         {story(context)}
       </ColorModeObserver>
     )

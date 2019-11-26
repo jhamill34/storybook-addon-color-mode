@@ -1,15 +1,8 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Styled, ColorMode, Theme, ThemeProvider } from 'theme-ui'
-import { ColorModeChannel } from '../models'
-import { CHANGE_MODE } from '../constants'
-import { isElementDirty, makeDirty, setThemeUIClass } from '../utils'
+import { useColorMode } from '../hooks/useColorMode'
 
 type ColorModeObserverProps = {
-  /**
-   * Channel that listens for when the color mode should change
-   */
-  channel: ColorModeChannel
-
   /**
    * The mode that should be initially rendered
    */
@@ -33,31 +26,9 @@ type ColorModeObserverProps = {
 function BaseColorModeObserver(
   props: ColorModeObserverProps
 ): React.ReactElement {
-  const { channel, initialMode, theme, children } = props
-  // If a theme-ui-<something> class exists don't set anything
-  useEffect(() => {
-    if (!isElementDirty(document.body)) {
-      setThemeUIClass(document.body, initialMode)
-      makeDirty(document.body)
-    }
-  }, [initialMode])
+  const { initialMode, theme, children } = props
 
-  // Replace the current theme-ui class with the new one
-  useEffect(() => {
-    /**
-     * Callback function in response to change mode event
-     * @param mode - the new mode to set
-     */
-    function handleEvent(mode: string): void {
-      setThemeUIClass(document.body, mode)
-    }
-
-    channel.addListener<string>(CHANGE_MODE, handleEvent)
-
-    return (): void => {
-      channel.removeListener<string>(CHANGE_MODE, handleEvent)
-    }
-  }, [channel])
+  useColorMode(initialMode)
 
   return (
     <ThemeProvider theme={theme}>

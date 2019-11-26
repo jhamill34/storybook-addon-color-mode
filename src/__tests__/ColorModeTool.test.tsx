@@ -1,8 +1,10 @@
 import React from 'react'
 import { render } from '@testing-library/react'
 import { ThemeProvider, convert } from '@storybook/theming'
+import Channel from '@storybook/channels'
 import { ColorModeTool } from '../components/ColorModeTool'
-import { ColorModeChannel } from '../models'
+
+type ColorModeChannel = Pick<Channel, 'emit' | 'addListener' | 'removeListener'>
 
 const mockChannel: ColorModeChannel = {
   emit: jest.fn(),
