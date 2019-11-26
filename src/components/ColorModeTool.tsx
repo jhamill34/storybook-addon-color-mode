@@ -62,7 +62,7 @@ export function ColorModeTool(): React.ReactElement {
     prevIndex,
     nextIndex,
     setIndex,
-    bindings
+    Object.assign({}, defaultBindings, bindings)
   )
   useKeyCode(keyboardHandler)
 
