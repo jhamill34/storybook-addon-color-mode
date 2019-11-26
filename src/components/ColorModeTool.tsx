@@ -46,10 +46,10 @@ export function ColorModeTool(): React.ReactElement {
   )
 
   const list = useMemo(() => toList(modes), [modes])
-  const defaultIndex = useMemo(
-    () => list.findIndex(m => m.id === defaultMode),
-    [defaultMode, list]
-  )
+  const defaultIndex = useMemo(() => {
+    const ndx: number = list.findIndex(m => m.id === defaultMode)
+    return ndx > 0 ? ndx : 0
+  }, [defaultMode, list])
 
   const {
     currentIndex,

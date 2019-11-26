@@ -20,7 +20,7 @@
     "lint": "eslint --ignore-path .gitignore \"*/**/*.{js,ts,tsx}\"",
     "prepublish": "yarn run build",
     "test": "jest",
-    "docs": "typedoc",
+    "docs": "typedoc --mode modules",
     "semantic-release": "semantic-release"
   },
   "dependencies": {
