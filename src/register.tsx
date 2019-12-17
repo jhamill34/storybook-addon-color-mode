@@ -17,6 +17,7 @@ addons.register(ADDON_ID, () => {
   addons.add(ADDON_ID, {
     type: types.TOOL,
     title,
+    match: ({ viewMode }) => viewMode === 'story',
     render,
     paramKey: PARAM_KEY,
   })

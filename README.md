@@ -21,7 +21,7 @@ yarn add -D storybook-addon-color-mode theme-ui react
 Then, add following content to .storybook/addons.js
 
 ```js
-import 'storybook-addon-color-mode/dist/register'
+import 'storybook-addon-color-mode/register'
 ```
 
 You should now be able to see the color mode addon icon in the the toolbar at the top of the screen.

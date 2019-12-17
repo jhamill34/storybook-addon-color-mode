@@ -14,7 +14,8 @@ module.exports = {
   ],
   env: {
     browser: 'true',
-    jest: 'true'
+    jest: 'true',
+    node: 'true'
   },
   parserOptions: {
     ecmaVersion: 2018,
