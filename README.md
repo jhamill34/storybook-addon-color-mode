@@ -163,3 +163,7 @@ const theme = {
   }
 }
 ```
+
+## Inspiration 
+
+This project was highly influenced by [@storybook/addon-viewport](https://github.com/storybookjs/storybook/tree/next/addons/viewport)
