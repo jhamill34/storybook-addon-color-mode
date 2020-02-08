@@ -2,6 +2,10 @@
 
 # Storybook Color Mode Addon
 
+This project has been moved to: https://gitlab.com/joshrasmussen/storybook-addons/-/tree/master/packages/color-mode
+
+---
+
 Storybook Color Addon allows your stories to be displayed in their various color modes specified by theme-ui
 
 ## Installation
